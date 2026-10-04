@@ -1,0 +1,43 @@
+/* Tùy chỉnh danh mục active nút bấm */
+.cat-btn.active {
+  background-color: #047857; /* emerald-700 */
+  color: #ffffff;
+  border-color: #047857;
+}
+
+.cat-btn {
+  background-color: #ffffff;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+.cat-btn:hover:not(.active) {
+  background-color: #f3f4f6;
+}
+
+/* Hoạt ảnh mượt mà */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+/* Cuộn trang mượt */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Style cho Toast Notification */
+.toast {
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
