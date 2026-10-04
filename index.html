@@ -49,6 +49,10 @@
           <span class="hidden md:inline">Giỏ Hàng</span>
           <span id="cart-badge" class="absolute -top-2 -right-2 bg-amber-400 text-emerald-950 font-bold text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
         </button>
+        <button onclick="switchView('contact')" class="hover:text-amber-200 transition font-medium flex items-center space-x-1">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+          <span class="hidden md:inline">Liên Hệ</span>
+        </button>
 
         <!-- User Logged In Info / Logout -->
         <div id="user-nav-item" class="hidden flex items-center space-x-2 border-l border-emerald-600 pl-4">
@@ -255,6 +259,90 @@
         </div>
       </div>
     </section>
+    <!-- VIEW: LIÊN HỆ & HỖ TRỢ -->
+<div id="view-contact" class="hidden max-w-4xl mx-auto space-y-8 animate-fade-in">
+  <div class="text-center space-y-2">
+    <h2 class="text-2xl font-bold text-gray-800">Liên Hệ & Hỗ Trợ Khách Hàng</h2>
+    <p class="text-sm text-gray-500">Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn 24/7</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Thẻ thông tin liên hệ -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100 space-y-6">
+      <h3 class="font-bold text-emerald-800 text-lg border-b pb-3">Thông tin kết nối</h3>
+      
+      <div class="space-y-4 text-sm text-gray-700">
+        <div class="flex items-start gap-3">
+          <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg">
+            <i data-lucide="mail" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="font-bold text-gray-800">Email hỗ trợ:</p>
+            <a href="mailto:hotro.namhat@gmail.com" class="text-emerald-600 hover:underline">hotro.namhat@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg">
+            <i data-lucide="phone" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="font-bold text-gray-800">Hotline tư vấn:</p>
+            <p class="text-gray-600">0909 123 456 (8:00 - 21:00)</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="font-bold text-gray-800">Địa chỉ cửa hàng:</p>
+            <p class="text-gray-600">123 Đường Dinh Dưỡng, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form gửi tin nhắn hỗ trợ -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+      <h3 class="font-bold text-gray-800 text-lg mb-4">Gửi tin nhắn cho Nắm Hạt</h3>
+      <form onsubmit="handleSendContact(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Họ và tên</label>
+          <input type="text" required class="w-full text-sm border rounded-lg p-2.5 focus:ring-1 focus:ring-emerald-500 outline-none" placeholder="Nguyễn Văn A">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Email của bạn</label>
+          <input type="email" required class="w-full text-sm border rounded-lg p-2.5 focus:ring-1 focus:ring-emerald-500 outline-none" placeholder="email@example.com">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Nội dung cần hỗ trợ</label>
+          <textarea rows="3" required class="w-full text-sm border rounded-lg p-2.5 focus:ring-1 focus:ring-emerald-500 outline-none" placeholder="Bạn cần hỗ trợ điều gì?"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg transition shadow text-sm">
+          Gửi Yêu Cầu Hỗ Trợ
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Widget Phát Nhạc YouTube Cố Định -->
+<div class="fixed bottom-4 left-4 z-50 bg-white/95 backdrop-blur-md p-2.5 rounded-2xl shadow-xl border border-emerald-200 flex flex-col gap-2">
+  <div class="flex items-center gap-2 px-1">
+    <i data-lucide="music" class="w-4 h-4 text-emerald-600 animate-bounce"></i>
+    <span class="text-xs font-bold text-emerald-900">Chắc Ai Đó Sẽ Về - Sơn Tùng M-TP</span>
+  </div>
+  <iframe 
+    class="rounded-xl w-48 h-28 shadow-inner" 
+    src="https://www.youtube.com/embed/oC3Pc4xTOaM?si=SWtT6YBp8jwByOw2" 
+    title="Chắc Ai Đó Sẽ Về" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen>
+  </iframe>
+</div>
 
   </main>
 

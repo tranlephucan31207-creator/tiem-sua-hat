@@ -32,11 +32,13 @@ async function initDatabase() {
   if (!localStorage.getItem('nutmilk_users')) {
     const admin1Hash = await hashPassword('thanhtuyen123');
     const admin2Hash = await hashPassword('phucan123');
+    const admin3Hash = await hashPassword('besau123');
     const userHash = await hashPassword('user123');
     
     const initialUsers = [
       { username: 'tranthithanhtuyen2007@', name: 'Trần Thị Thanh Tuyền', passwordHash: admin1Hash, role: 'admin' },
       { username: 'tranlephucan2007@', name: 'Trần Lê Phúc An', passwordHash: admin2Hash, role: 'admin' },
+      { username: 'lethibesau1984@', name: 'Lê Thị Bé Sáu', passwordHash: admin3Hash, role: 'admin' },
       { username: 'user', name: 'Nguyễn Văn Khách', passwordHash: userHash, role: 'user' }
     ];
     localStorage.setItem('nutmilk_users', JSON.stringify(initialUsers));
@@ -79,12 +81,16 @@ function showToast(msg, type = 'success') {
   setTimeout(() => toast.remove(), 3000);
 }
 
-// --- ĐIỀU HƯỚNG VIEW ---
 function switchView(viewName) {
+  // Ẩn tất cả các view
   document.getElementById('view-shop').classList.add('hidden');
   document.getElementById('view-cart').classList.add('hidden');
   document.getElementById('view-admin').classList.add('hidden');
+  if (document.getElementById('view-contact')) {
+    document.getElementById('view-contact').classList.add('hidden');
+  }
 
+  // Hiển thị view được chọn
   if (viewName === 'admin') {
     if (!state.currentUser || state.currentUser.role !== 'admin') {
       showToast('Bạn cần đăng nhập tài khoản Admin!', 'error');
@@ -95,10 +101,20 @@ function switchView(viewName) {
     renderAdminDashboard();
   } else if (viewName === 'cart') {
     document.getElementById('view-cart').classList.remove('hidden');
+  } else if (viewName === 'contact') {
+    document.getElementById('view-contact').classList.remove('hidden');
   } else {
     document.getElementById('view-shop').classList.remove('hidden');
   }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Hàm xử lý khi khách hàng gửi form Liên hệ
+function handleSendContact(e) {
+  e.preventDefault();
+  showToast("Cảm ơn bạn! Yêu cầu hỗ trợ đã được gửi thành công.");
+  e.target.reset();
 }
 
 // --- AUTHENTICATION & LOGIN ---
@@ -368,6 +384,13 @@ function renderCart() {
   document.getElementById('cart-subtotal').textContent = formatVND(subtotal);
   document.getElementById('cart-total').textContent = formatVND(subtotal);
   safeCreateIcons();
+}
+
+// --- XỬ LÝ GỬI YÊU CẦU LIÊN HỆ ---
+function handleSendContact(e) {
+  e.preventDefault();
+  showToast("Cảm ơn bạn! Yêu cầu hỗ trợ đã được gửi thành công.");
+  e.target.reset();
 }
 
 // --- THANH TOÁN ĐƠN HÀNG ---
