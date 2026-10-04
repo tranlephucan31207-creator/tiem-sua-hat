@@ -624,3 +624,36 @@ document.addEventListener('click', function initAudioOnInteraction() {
   }
   document.removeEventListener('click', initAudioOnInteraction);
 }, { once: true });
+let isPlaying = true;
+
+// Function Bật / Tạm dừng nhạc
+function togglePlayMusic() {
+  const musicIframe = document.getElementById('bg-music-iframe');
+  const playIcon = document.getElementById('play-icon');
+  if (!musicIframe || !musicIframe.contentWindow) return;
+
+  if (isPlaying) {
+    // Gửi lệnh tạm dừng nhạc
+    musicIframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'pauseVideo',
+      args: ''
+    }), '*');
+    isPlaying = false;
+    if (playIcon) playIcon.setAttribute('data-lucide', 'play');
+  } else {
+    // Gửi lệnh tiếp tục phát nhạc
+    musicIframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'playVideo',
+      args: ''
+    }), '*');
+    isPlaying = true;
+    if (playIcon) playIcon.setAttribute('data-lucide', 'pause');
+  }
+
+  // Cập nhật lại Icon Lucide
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+}

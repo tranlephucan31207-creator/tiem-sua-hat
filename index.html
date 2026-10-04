@@ -327,13 +327,17 @@
     </div>
   </div>
 </div>
-<!-- Widget Phát Nhạc Nền YouTube Có Chỉnh Âm Lượng -->
+<!-- Widget Phát Nhạc Nền YouTube Có Nút Play/Pause & Âm Lượng -->
 <div class="fixed bottom-4 left-4 z-50 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-emerald-200 flex flex-col gap-2 transition-all duration-300">
   <div class="flex items-center justify-between gap-3">
     <div class="flex items-center gap-2">
-      <i data-lucide="music" class="w-4 h-4 text-emerald-600 animate-spin" style="animation-duration: 4s;"></i>
+      <!-- Nút Phát / Tạm dừng nhạc -->
+      <button id="play-toggle-btn" onclick="togglePlayMusic()" class="bg-emerald-600 hover:bg-emerald-700 text-white p-1.5 rounded-full transition shadow" title="Phát / Tạm dừng">
+        <i data-lucide="pause" id="play-icon" class="w-4 h-4"></i>
+      </button>
       <span class="text-xs font-bold text-emerald-900">Chắc Ai Đó Sẽ Về</span>
     </div>
+    
     <!-- Nút Mute / Unmute nhanh -->
     <button id="mute-btn" onclick="toggleMuteMusic()" class="text-emerald-700 hover:text-emerald-900 transition" title="Tắt/Mở tiếng">
       <i data-lucide="volume-2" id="volume-icon" class="w-4 h-4"></i>
