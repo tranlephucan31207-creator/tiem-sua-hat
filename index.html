@@ -327,20 +327,41 @@
     </div>
   </div>
 </div>
-<!-- Widget Phát Nhạc YouTube Cố Định -->
-<div class="fixed bottom-4 left-4 z-50 bg-white/95 backdrop-blur-md p-2.5 rounded-2xl shadow-xl border border-emerald-200 flex flex-col gap-2">
-  <div class="flex items-center gap-2 px-1">
-    <i data-lucide="music" class="w-4 h-4 text-emerald-600 animate-bounce"></i>
-    <span class="text-xs font-bold text-emerald-900">Chắc Ai Đó Sẽ Về - Sơn Tùng M-TP</span>
+<!-- Widget Phát Nhạc Nền YouTube Có Chỉnh Âm Lượng -->
+<div class="fixed bottom-4 left-4 z-50 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-emerald-200 flex flex-col gap-2 transition-all duration-300">
+  <div class="flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2">
+      <i data-lucide="music" class="w-4 h-4 text-emerald-600 animate-spin" style="animation-duration: 4s;"></i>
+      <span class="text-xs font-bold text-emerald-900">Chắc Ai Đó Sẽ Về</span>
+    </div>
+    <!-- Nút Mute / Unmute nhanh -->
+    <button id="mute-btn" onclick="toggleMuteMusic()" class="text-emerald-700 hover:text-emerald-900 transition" title="Tắt/Mở tiếng">
+      <i data-lucide="volume-2" id="volume-icon" class="w-4 h-4"></i>
+    </button>
   </div>
+
+  <!-- Thanh trượt điều chỉnh Âm lượng -->
+  <div class="flex items-center gap-2 pt-1 border-t border-emerald-100">
+    <i data-lucide="volume-1" class="w-3.5 h-3.5 text-emerald-600"></i>
+    <input 
+      type="range" 
+      id="volume-control" 
+      min="0" 
+      max="100" 
+      value="50" 
+      oninput="changeMusicVolume(this.value)"
+      class="w-32 h-1.5 bg-emerald-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+    >
+    <span id="volume-value" class="text-[10px] font-bold text-emerald-700 w-6">50%</span>
+  </div>
+
+  <!-- Khung iframe YouTube ẩn -->
   <iframe 
-    class="rounded-xl w-48 h-28 shadow-inner" 
-    src="https://www.youtube.com/embed/oC3Pc4xTOaM?si=SWtT6YBp8jwByOw2" 
-    title="Chắc Ai Đó Sẽ Về" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerpolicy="no-referrer-when-downgrade"
-    allowfullscreen>
+    id="bg-music-iframe"
+    class="hidden" 
+    src="https://www.youtube.com/embed/oC3Pc4xTOaM?enablejsapi=1&autoplay=1&loop=1&playlist=oC3Pc4xTOaM" 
+    title="Nhạc nền Nắm Hạt" 
+    allow="autoplay; encrypted-media">
   </iframe>
 </div>
 

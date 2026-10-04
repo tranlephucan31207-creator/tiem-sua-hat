@@ -548,3 +548,79 @@ function deleteProduct(prodId) {
   renderProducts();
   showToast("Đã xóa sản phẩm!");
 }
+// --- XỬ LÝ ĐIỀU CHỈNH ÂM LƯỢNG NHẠC NỀN YOUTUBE ---
+let isMuted = false;
+let previousVolume = 50;
+
+// Function điều chỉnh âm lượng (0 - 100)
+function changeMusicVolume(val) {
+  const musicIframe = document.getElementById('bg-music-iframe');
+  const volumeValueText = document.getElementById('volume-value');
+  
+  if (volumeValueText) {
+    volumeValueText.innerText = val + '%';
+  }
+
+  if (musicIframe && musicIframe.contentWindow) {
+    // Gửi lệnh setVolume đến YouTube API
+    musicIframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'setVolume',
+      args: [parseInt(val)]
+    }), '*');
+  }
+
+  // Cập nhật icon âm lượng tùy theo mức giá trị
+  updateVolumeIcon(val);
+}
+
+// Function Bật/Tắt tiếng nhanh (Mute)
+function toggleMuteMusic() {
+  const volumeSlider = document.getElementById('volume-control');
+  if (!volumeSlider) return;
+
+  if (isMuted) {
+    // Mở lại tiếng với âm lượng trước đó
+    volumeSlider.value = previousVolume;
+    changeMusicVolume(previousVolume);
+    isMuted = false;
+  } else {
+    // Tắt tiếng
+    previousVolume = volumeSlider.value;
+    volumeSlider.value = 0;
+    changeMusicVolume(0);
+    isMuted = true;
+  }
+}
+
+// Cập nhật Icon âm lượng sinh động
+function updateVolumeIcon(val) {
+  const iconElement = document.getElementById('volume-icon');
+  if (!iconElement) return;
+
+  if (parseInt(val) === 0) {
+    iconElement.setAttribute('data-lucide', 'volume-x');
+  } else if (parseInt(val) < 50) {
+    iconElement.setAttribute('data-lucide', 'volume-1');
+  } else {
+    iconElement.setAttribute('data-lucide', 'volume-2');
+  }
+  
+  // Render lại icon Lucide nếu thư viện khả dụng
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+}
+
+// Tự động kích hoạt phát nhạc khi người dùng tương tác lần đầu
+document.addEventListener('click', function initAudioOnInteraction() {
+  const musicIframe = document.getElementById('bg-music-iframe');
+  if (musicIframe && musicIframe.contentWindow) {
+    musicIframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'playVideo',
+      args: ''
+    }), '*');
+  }
+  document.removeEventListener('click', initAudioOnInteraction);
+}, { once: true });
