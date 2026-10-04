@@ -548,52 +548,71 @@ function deleteProduct(prodId) {
   renderProducts();
   showToast("Đã xóa sản phẩm!");
 }
-// --- XỬ LÝ ĐIỀU CHỈNH ÂM LƯỢNG NHẠC NỀN YOUTUBE ---
+// --- XỬ LÝ NHẠC NỀN YOUTUBE ---
+let isPlaying = false;
 let isMuted = false;
 let previousVolume = 50;
 
-// Function điều chỉnh âm lượng (0 - 100)
-function changeMusicVolume(val) {
+// Gửi lệnh tương tác tới YouTube Iframe
+function sendYouTubeCommand(func, args = []) {
   const musicIframe = document.getElementById('bg-music-iframe');
-  const volumeValueText = document.getElementById('volume-value');
+  if (musicIframe && musicIframe.contentWindow) {
+    musicIframe.contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: func,
+      args: args
+    }), '*');
+  }
+}
+
+// Bật / Tạm dừng nhạc
+function togglePlayMusic() {
+  const playIcon = document.getElementById('play-icon');
   
+  if (isPlaying) {
+    sendYouTubeCommand('pauseVideo');
+    isPlaying = false;
+    if (playIcon) playIcon.setAttribute('data-lucide', 'play');
+  } else {
+    sendYouTubeCommand('playVideo');
+    isPlaying = true;
+    if (playIcon) playIcon.setAttribute('data-lucide', 'pause');
+  }
+
+  safeCreateIcons();
+}
+
+// Điều chỉnh Âm lượng
+function changeMusicVolume(val) {
+  const volumeValueText = document.getElementById('volume-value');
   if (volumeValueText) {
     volumeValueText.innerText = val + '%';
   }
 
-  if (musicIframe && musicIframe.contentWindow) {
-    // Gửi lệnh setVolume đến YouTube API
-    musicIframe.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func: 'setVolume',
-      args: [parseInt(val)]
-    }), '*');
-  }
-
-  // Cập nhật icon âm lượng tùy theo mức giá trị
+  sendYouTubeCommand('setVolume', [parseInt(val)]);
   updateVolumeIcon(val);
 }
 
-// Function Bật/Tắt tiếng nhanh (Mute)
+// Bật / Tắt tiếng (Mute)
 function toggleMuteMusic() {
   const volumeSlider = document.getElementById('volume-control');
   if (!volumeSlider) return;
 
   if (isMuted) {
-    // Mở lại tiếng với âm lượng trước đó
     volumeSlider.value = previousVolume;
     changeMusicVolume(previousVolume);
+    sendYouTubeCommand('unMute');
     isMuted = false;
   } else {
-    // Tắt tiếng
     previousVolume = volumeSlider.value;
     volumeSlider.value = 0;
     changeMusicVolume(0);
+    sendYouTubeCommand('mute');
     isMuted = true;
   }
 }
 
-// Cập nhật Icon âm lượng sinh động
+// Cập nhật Icon Âm lượng
 function updateVolumeIcon(val) {
   const iconElement = document.getElementById('volume-icon');
   if (!iconElement) return;
@@ -606,54 +625,14 @@ function updateVolumeIcon(val) {
     iconElement.setAttribute('data-lucide', 'volume-2');
   }
   
-  // Render lại icon Lucide nếu thư viện khả dụng
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  safeCreateIcons();
 }
 
-// Tự động kích hoạt phát nhạc khi người dùng tương tác lần đầu
+// Tự động phát nhạc khi nhấp bất kỳ đâu trên trang lần đầu
 document.addEventListener('click', function initAudioOnInteraction() {
-  const musicIframe = document.getElementById('bg-music-iframe');
-  if (musicIframe && musicIframe.contentWindow) {
-    musicIframe.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func: 'playVideo',
-      args: ''
-    }), '*');
-  }
-  document.removeEventListener('click', initAudioOnInteraction);
-}, { once: true });
-let isPlaying = true;
-
-// Function Bật / Tạm dừng nhạc
-function togglePlayMusic() {
-  const musicIframe = document.getElementById('bg-music-iframe');
+  sendYouTubeCommand('playVideo');
+  isPlaying = true;
   const playIcon = document.getElementById('play-icon');
-  if (!musicIframe || !musicIframe.contentWindow) return;
-
-  if (isPlaying) {
-    // Gửi lệnh tạm dừng nhạc
-    musicIframe.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func: 'pauseVideo',
-      args: ''
-    }), '*');
-    isPlaying = false;
-    if (playIcon) playIcon.setAttribute('data-lucide', 'play');
-  } else {
-    // Gửi lệnh tiếp tục phát nhạc
-    musicIframe.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func: 'playVideo',
-      args: ''
-    }), '*');
-    isPlaying = true;
-    if (playIcon) playIcon.setAttribute('data-lucide', 'pause');
-  }
-
-  // Cập nhật lại Icon Lucide
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-}
+  if (playIcon) playIcon.setAttribute('data-lucide', 'pause');
+  safeCreateIcons();
+}, { once: true });
